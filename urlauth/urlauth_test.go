@@ -65,6 +65,32 @@ func TestSignURL(t *testing.T) {
 			},
 			want: "https://www.example.com/foo?st=Uj93Ort3Xu6UYeIovupeUA&e=1544720086",
 		},
+		{
+			name: "Valid URL path without an expiration time",
+			args: args{
+				url:    "/foo?client_id=abc123",
+				secret: "supersecret",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Valid URL path with a query param",
+			args: args{
+				url:            "/foo?bar=1",
+				secret:         "supersecret",
+				expirationTime: &expirationTime,
+			},
+			want: "/foo?bar=1&st=Uj93Ort3Xu6UYeIovupeUA&e=1544720086",
+		},
+		{
+			name: "Valid URL path without a query-param",
+			args: args{
+				url:            "/foo",
+				secret:         "supersecret",
+				expirationTime: &expirationTime,
+			},
+			want: "/foo?st=Uj93Ort3Xu6UYeIovupeUA&e=1544720086",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
